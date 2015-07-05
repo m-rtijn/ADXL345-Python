@@ -16,3 +16,5 @@ program:
 ```python
 	import ADXL345
 ```
+
+Please note that for this program to work you need to have i2c enabled on your Raspberry Pi.
