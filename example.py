@@ -7,7 +7,7 @@ from ADXL345 import ADXL345
 accelerometer = ADXL345(0x53)
 
 while True:
-    axes = accelerometer.GetAllAxes()
+    axes = accelerometer.get_all_axes()
     print("x: %.3f" %(axes['x'])
     print("y: %.3f" %(axes['y']))
     print("z: %.3f" %(axes['z'])) 

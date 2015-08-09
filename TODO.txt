@@ -1,1 +1,3 @@
 ADXL345 to do list
+    - Test:
+        - if my code cleanup didn't break anything
