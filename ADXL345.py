@@ -11,7 +11,7 @@ class ADXL345:
     # Global Variables
     EARTH_GRAVITY_MS2 = 9.80665
     GRAVITY_MS2 = None
-    scale_multiplier = 0.0039 # This is the typical scale factor in g/LSB as given in the datasheet, page 4) 
+    SCALE_MULTIPLIER = 0.0039 # This is the typical scale factor in g/LSB as given in the datasheet, page 4) 
     bus = smbus.SMBus(1) # This is the bus that we use to send data over I2C
     address = None
     DEBUG = False
@@ -22,13 +22,13 @@ class ADXL345:
     POWER_CTL = 0x2D
     measure = 0x08
 
-    bandwidthRate1600HZ = 0x0F
-    bandwidthRate800HZ = 0x0E
-    bandwidthRate400HZ = 0x0D
-    bandwidthRate200HZ = 0x0C
-    bandwidthRate100HZ = 0x0B
-    bandwidthRate50HZ = 0x0A
-    bandwidthRate25HZ = 0x09
+    BANDWIDTH_RATE_1600HZ = 0x0F
+    BANDWIDTH_RATE_800HZ = 0x0E
+    BANDWIDTH_RATE_400HZ = 0x0D
+    BANDWIDTH_RATE_200HZ = 0x0C
+    BANDWIDTH_RATE_100HZ = 0x0B
+    BANDWIDTH_RATE_50HZ = 0x0A
+    BANDWIDTH_RATE_25HZ = 0x09
 
     RANGE_2G = 0x00
     RANGE_4G = 0x01
@@ -42,7 +42,7 @@ class ADXL345:
     DATAZ0 = 0x36
     DATAZ1 = 0x37
 
-    def __init__(self,  address, base_range = RANGE_2G, base_bandwidth_rate = bandwidthRate100HZ):
+    def __init__(self,  address, base_range = RANGE_2G, base_bandwidth_rate = BANDWIDTH_RATE_100HZ):
         self.GRAVITY_MS2 = self.EARTH_GRAVITY_MS2
 
         self.address = address
@@ -146,9 +146,9 @@ class ADXL345:
             z = z - (1 << 16)
 
         # Multiply the values by the scale multiplier to get the acceleration in g. The scale multiplier is given in the datasheet.
-        x = x * self.scale_multiplier 
-        y = y * self.scale_multiplier
-        z = z * self.scale_multiplier
+        x = x * self.SCALE_MULTIPLIER
+        y = y * self.SCALE_MULTIPLIER
+        z = z * self.SCALE_MULTIPLIER
         
         # Multiply the values in g by the gravity in m/s^2 to get the acceleration in m/s^2.
         x = x * self.GRAVITY_MS2
@@ -189,7 +189,7 @@ class ADXL345:
             x = x - (1 << 16)
             
         # Multiply the value by the scale multiplier to get the acceleration in g.
-        x = x * self.scale_multiplier
+        x = x * self.SCALE_MULTIPLIER
 
         # Multiply the value in g by the gravity in m/s^2 to get the acceleration in m/s^2.
         x = x * self.GRAVITY_MS2
