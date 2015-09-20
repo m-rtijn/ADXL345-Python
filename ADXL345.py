@@ -74,7 +74,7 @@ class ADXL345:
     # Changes the bandwidthRate by writing rate to bandwidthRate, register 0x2C
     def set_bandwidth_rate(self, rate):
         try:
-            self.bus.write_byte_data(self.address, self.bandwidthRate, rate)
+            self.bus.write_byte_data(self.address, self.BANDWIDTH_RATE_REG, rate)
         except:
             print("Error in set_bandwidth_rate(), are you sure that the ADXL345 is wired correctly?")
 
