@@ -231,11 +231,4 @@ if __name__ == "__main__":
     axes = accelerometer.get_all_axes()
     print("x: %.3f" % (axes['x']))
     print("y: %.3f" % (axes['y']))
-    print("z: %.3f" % (axes['z'])) 
-
-
-class input_error(Exception):
-    def __init__(self, error_message, input_expression):
-        self.error_message = error_message
-        self.input_expression = input_expression
-        print(input_expression + " is an invalid " + error_message)
+    print("z: %.3f" % (axes['z']))
