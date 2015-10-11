@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 # Made by: MrTijn/Tijndagamer
 # Copyright 2015
 

@@ -1,8 +1,10 @@
+# ADXL345-Python
+
 You can use this program to interact with the ADXL345 Accelerometer using your
 Raspberry Pi.
 
-What you do need is the python-smbus library, if you don't have this library yet
-you can install it using:
+What you need is the python-smbus library, if you don't have this library installed
+yet you can install it using:
 ```
 	sudo apt-get install python-smbus
 ```
