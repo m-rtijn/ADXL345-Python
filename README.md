@@ -14,7 +14,7 @@ If you don't know how to import it, it's really simple: just place this in your 
 program:
 
 ```python
-	import ADXL345
+	from ADXL345 import ADXL345
 ```
 
 Please note that for this program to work you need to have i2c enabled on your Raspberry Pi.

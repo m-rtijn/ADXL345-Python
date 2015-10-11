@@ -7,12 +7,13 @@ import smbus
 
 
 class ADXL345:
-
     # Global Variables
     EARTH_GRAVITY_MS2 = 9.80665
     GRAVITY_MS2 = None
-    SCALE_MULTIPLIER = 0.0039 # This is the typical scale factor in g/LSB as given in the datasheet, page 4) 
-    bus = smbus.SMBus(1) # This is the bus that we use to send data over I2C
+    # This is the typical scale factor in g/LSB as given in the datasheet (page 4)
+    SCALE_MULTIPLIER = 0.0039
+    # This is the bus that we use to send data over I2C
+    bus = smbus.SMBus(1)
     address = None
     DEBUG = False
 
@@ -44,42 +45,50 @@ class ADXL345:
 
     def __init__(self,  address, base_range = RANGE_2G, base_bandwidth_rate = BANDWIDTH_RATE_100HZ):
         self.GRAVITY_MS2 = self.EARTH_GRAVITY_MS2
-
         self.address = address
         self.set_bandwidth_rate(base_bandwidth_rate)
         self.set_range(base_range)
         self.enable_measurement()
 
-    # Enables measurement by writing 0x08 to POWER_CTL, register 0x27
     def enable_measurement(self):
+        """Enables measurement by writing 0x08 to POWER_CTL"""
         try:
             self.bus.write_byte_data(self.address, self.POWER_CTL, self.measure)
         except:
             print("Error in enable_measurement(), are you sure that the ADXL345 is wired correctly?")
 
-    # Disables measurement by writing 0x00 to POWER_CTL, register 0x27
     def disable_measurement(self):
+        """Disables measurement by writing 0x00 to POWER_CTL"""
         try:
             self.bus.write_byte_data(self.address, self.POWER_CTL, 0x00)
         except:
             print("Error in disable_measurement(), are you sure that the ADXL345 is wired correctly?")
 
-    # Reads POWER_CTL, register 0x27
     def read_measurement_mode(self):
+        """Reads POWER_CTL
+
+        Returns the read value.
+        """
         try:
             return self.bus.read_byte_data(self.address, self.POWER_CTL)
         except:
             print("Error in read_measurement_mode(), are you sure that the ADXL345 is wired correctly?")
 
-    # Changes the bandwidthRate by writing rate to bandwidthRate, register 0x2C
     def set_bandwidth_rate(self, rate):
+        """Changes the bandwidth rate by writing rate to BANDWIDTH_RATE_REG
+
+        rate -- the bandwidth rate the ADXL345 will be set to. Using a pre-defined rate is advised.
+        """
         try:
             self.bus.write_byte_data(self.address, self.BANDWIDTH_RATE_REG, rate)
         except:
             print("Error in set_bandwidth_rate(), are you sure that the ADXL345 is wired correctly?")
 
-    # Reads bandwidthRate, register 0x2C
     def read_bandwidth_rate(self):
+        """Reads BANDWIDTH_RATE_REG
+
+        Returns the read value.
+        """
         try:
             raw_bandwidth_rate = self.bus.read_byte_data(self.address, self.bandwidthRate)
             return raw_bandwidth_rate & 0x0F
@@ -88,6 +97,10 @@ class ADXL345:
 
     # Changes the range of the ADXL345. Available ranges are 2G, 4G, 8G and 16G.
     def set_range(self, range):
+        """Changes the range of the ADXL345.
+
+        range -- the range to set the accelerometer to. Using a pre-defined range is advised.
+        """
         value = None
         
         try:
@@ -102,10 +115,11 @@ class ADXL345:
 
         self.bus.write_byte_data(self.address, self.DATA_FORMAT, value)
 
-    # Reads the range the ADXL345 is set to.
-    # If hex is True it will return hexadecimal values
-    # If hex is False it will return strings
     def read_range(self, hex):
+        """Reads the range the ADXL345 is currently set to.
+
+        hex -- If hex is true it wil return a hexadecimal value. If raw is false it will return a string.
+        """
         raw_value = self.bus.read_byte_data(self.address, self.DATA_FORMAT)
 
         if hex is True:
@@ -127,12 +141,16 @@ class ADXL345:
             elif raw_value == 11:
                 return "16G"
 
-    # Gets all the axes and returns them in a dictionary
     def get_all_axes(self, round = False):
+        """Gets the measurement results from all the axes
+
+        round -- if round is true it will round to 4 digits.
+        Returns a dictionary.
+        """
         # Read the raw bytes from the ADXL345
         bytes = self.bus.read_i2c_block_data(self.address, self.DATAX0, 6)
 
-        #
+        # bit shifting magic.
         x = bytes[0] | (bytes[1] << 8)
         if(x & (1 << 16 - 1)):
             x = x - (1 << 16)
@@ -145,7 +163,8 @@ class ADXL345:
         if(z & (1 << 16 - 1)):
             z = z - (1 << 16)
 
-        # Multiply the values by the scale multiplier to get the acceleration in g. The scale multiplier is given in the datasheet.
+        # Multiply the values by the scale multiplier to get the acceleration in g. 
+        # The scale multiplier is given in the datasheet.
         x = x * self.SCALE_MULTIPLIER
         y = y * self.SCALE_MULTIPLIER
         z = z * self.SCALE_MULTIPLIER
@@ -169,36 +188,39 @@ class ADXL345:
         else:
             return {"x": x, "y": y, "z": z}
 
-    # Gets one specific value and returns it
     def get_one_value(self, value, round = False):
+        """Reads one value and returns it
+
+        value -- the value to be read. this can be 'x', 'y' or 'z'.
+        """
         read_register = 0x00
         
-        if value == "x":
+        if value == 'x':
             read_register = self.DATAX0
-        elif value == "y":
+        elif value == 'y':
             read_register = self.DATAY0
-        elif value == "z":
+        elif value == 'z':
             read_register = self.DATAZ0
             
         # Read the raw bytes from the ADXL345
         bytes = self.bus.read_i2c_block_data(self.address, read_register, 2)
 
-        # 
-        x = bytes[0] | (bytes[1] << 8)
-        if(x & (1 << 16 - 1)):
-            x = x - (1 << 16)
+        # bit shifting magic.
+        val = bytes[0] | (bytes[1] << 8)
+        if(val & (1 << 16 - 1)):
+            val = val - (1 << 16)
             
         # Multiply the value by the scale multiplier to get the acceleration in g.
-        x = x * self.SCALE_MULTIPLIER
+        val = val * self.SCALE_MULTIPLIER
 
         # Multiply the value in g by the gravity in m/s^2 to get the acceleration in m/s^2.
-        x = x * self.GRAVITY_MS2
+        val = val * self.GRAVITY_MS2
         
         # Round the values if the user wants to
         if round == True:
-            x = round(x, 4)
+            val = round(val, 4)
         
-        return x
+        return val
 
 # If a user runs this file just display the latest values
 if __name__ == "__main__":
@@ -210,7 +232,6 @@ if __name__ == "__main__":
 
 
 class input_error(Exception):
-
     def __init__(self, error_message, input_expression):
         self.error_message = error_message
         self.input_expression = input_expression

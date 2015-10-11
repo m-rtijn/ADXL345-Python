@@ -1,1 +1,7 @@
 ADXL345 to do list
+Add:
+
+Fix:
+
+Test:
+- test if the docstrings didn't break anything and work correctly.
