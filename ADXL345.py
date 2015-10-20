@@ -54,21 +54,21 @@ class ADXL345:
         self.enable_measurement()
 
     def enable_measurement(self):
-        """Enables measurement by writing 0x08 to POWER_CTL"""
+        """Enables measurement by writing 0x08 to POWER_CTL."""
         try:
             self.bus.write_byte_data(self.address, self.POWER_CTL, self.measure)
         except:
             print("Error in enable_measurement(), are you sure that the ADXL345 is wired correctly?")
 
     def disable_measurement(self):
-        """Disables measurement by writing 0x00 to POWER_CTL"""
+        """Disables measurement by writing 0x00 to POWER_CTL."""
         try:
             self.bus.write_byte_data(self.address, self.POWER_CTL, 0x00)
         except:
             print("Error in disable_measurement(), are you sure that the ADXL345 is wired correctly?")
 
     def read_measurement_mode(self):
-        """Reads POWER_CTL
+        """Reads POWER_CTL.
 
         Returns the read value.
         """
@@ -78,7 +78,7 @@ class ADXL345:
             print("Error in read_measurement_mode(), are you sure that the ADXL345 is wired correctly?")
 
     def set_bandwidth_rate(self, rate):
-        """Changes the bandwidth rate by writing rate to BANDWIDTH_RATE_REG
+        """Changes the bandwidth rate by writing rate to BANDWIDTH_RATE_REG.
 
         rate -- the bandwidth rate the ADXL345 will be set to. Using a pre-defined rate is advised.
         """
@@ -88,7 +88,7 @@ class ADXL345:
             print("Error in set_bandwidth_rate(), are you sure that the ADXL345 is wired correctly?")
 
     def read_bandwidth_rate(self):
-        """Reads BANDWIDTH_RATE_REG
+        """Reads BANDWIDTH_RATE_REG.
 
         Returns the read value.
         """
@@ -145,7 +145,7 @@ class ADXL345:
                 return "16G"
 
     def get_all_axes(self, round = False):
-        """Gets the measurement results from all the axes
+        """Gets the measurement results from all the axes.
 
         round -- if round is true it will round to 4 digits.
         Returns a dictionary.
@@ -192,7 +192,7 @@ class ADXL345:
             return {"x": x, "y": y, "z": z}
 
     def get_one_value(self, value, round = False):
-        """Reads one value and returns it
+        """Reads one value and returns it.
 
         value -- the value to be read. this can be 'x', 'y' or 'z'.
         """
