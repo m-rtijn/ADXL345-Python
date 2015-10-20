@@ -46,7 +46,7 @@ class ADXL345:
     DATAZ0 = 0x36
     DATAZ1 = 0x37
 
-    def __init__(self,  address, base_range = RANGE_2G, base_bandwidth_rate = BANDWIDTH_RATE_100HZ):
+    def __init__(self,  address = 0x53, base_range = RANGE_2G, base_bandwidth_rate = BANDWIDTH_RATE_100HZ):
         self.GRAVITY_MS2 = self.EARTH_GRAVITY_MS2
         self.address = address
         self.set_bandwidth_rate(base_bandwidth_rate)
