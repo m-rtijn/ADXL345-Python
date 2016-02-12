@@ -58,14 +58,14 @@ class ADXL345:
         try:
             self.bus.write_byte_data(self.address, self.POWER_CTL, self.measure)
         except:
-            print("Error in enable_measurement(), are you sure that the ADXL345 is wired correctly?")
+            return -1
 
     def disable_measurement(self):
         """Disables measurement by writing 0x00 to POWER_CTL."""
         try:
             self.bus.write_byte_data(self.address, self.POWER_CTL, 0x00)
         except:
-            print("Error in disable_measurement(), are you sure that the ADXL345 is wired correctly?")
+            return -1
 
     def read_measurement_mode(self):
         """Reads POWER_CTL.
@@ -75,7 +75,7 @@ class ADXL345:
         try:
             return self.bus.read_byte_data(self.address, self.POWER_CTL)
         except:
-            print("Error in read_measurement_mode(), are you sure that the ADXL345 is wired correctly?")
+            return -1
 
     def set_bandwidth_rate(self, rate):
         """Changes the bandwidth rate by writing rate to BANDWIDTH_RATE_REG.
@@ -85,7 +85,7 @@ class ADXL345:
         try:
             self.bus.write_byte_data(self.address, self.BANDWIDTH_RATE_REG, rate)
         except:
-            print("Error in set_bandwidth_rate(), are you sure that the ADXL345 is wired correctly?")
+            return -1
 
     def read_bandwidth_rate(self):
         """Reads BANDWIDTH_RATE_REG.
@@ -96,7 +96,7 @@ class ADXL345:
             raw_bandwidth_rate = self.bus.read_byte_data(self.address, self.bandwidthRate)
             return raw_bandwidth_rate & 0x0F
         except:
-            print("Error in read_bandwidth_rate, are you sure that the ADXL345 is wired correctly?")
+            return -1
 
     # Changes the range of the ADXL345. Available ranges are 2G, 4G, 8G and 16G.
     def set_range(self, range):
@@ -109,8 +109,7 @@ class ADXL345:
         try:
             value = self.bus.read_byte_data(self.address, self.DATA_FORMAT)
         except:
-            print("Error in read_bandwidth_rate, are you sure that the ADXL345 is wired correctly?")
-            return
+            return -1
 
         value &= ~0x0F;
         value |= range;
