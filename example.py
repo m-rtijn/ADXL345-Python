@@ -1,7 +1,11 @@
 #!/usr/bin/python
 
-# Made by: MrTijn/Tijndagamer
-# Copyright 2015
+"""
+Example script for ADXL345.py
+Made by: MrTijn/Tijndagamer
+Released under the MIT License
+Copyright 2015
+"""
 
 from ADXL345 import ADXL345
 from time import sleep
